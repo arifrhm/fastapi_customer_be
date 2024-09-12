@@ -12,7 +12,16 @@ done
 # Build and start the web container
 docker-compose up --build -d web
 
+# Run mypy type checks
+echo "Running mypy type checks..."
+mypy app/
+if [ $? -ne 0 ]; then
+    echo "mypy type checks failed. Exiting."
+    exit 1
+fi
+
 # Run the tests
+echo "Running pytest..."
 docker-compose run --rm web pytest
 
 # Optionally restart the db container
